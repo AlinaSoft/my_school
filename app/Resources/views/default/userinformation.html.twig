@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="user_info">
+        {% if app.session.get('UserId') is defined and app.session.get('UserId') is not null %}
+            <a href="/userinformation" alt="">{{ app.session.get('UserName')}} {{ app.session.get('UserSurname') }}</a>
+            <a href="/logoff" alt="" class="logoff">Atsijungti</a>
+        {% else %}
+            <form action="" method="post">
+                <input type="email" name="userEmail" placeholder="El. paštas"/>
+                <input type="submit" name="register" value="Prisijungti"/>
+            </form>
+        {% endif %}
+    </div>
+    <div id="wrapper">
+        <div id="container">
+            {% if app.session.get('worker') is defined and app.session.get('worker')  %}
+                <form  action="" method="post">
+                    <h5>Surasti vartotojo mokymus</h5>
+                    <input type="text" name="userEmail" placeholder="Vartotojo el. paštas" />
+                    <input type="submit" name="findUserTraining" value="Rodyti mokymus"/>
+                </form>
+            {% endif %}
+            <div id="trainings">
+                {% if data.Training is defined and data.Training is not empty %}
+                {% for item in data.Training %}
+                    <div class="trainings-list">
+                            <p>{{ item.trainingName }}</p>
+                    </div>
+                    <div class="trainings-date">
+                        {% if date(item.trainingDate) > date()  %}
+                            <p> Mokymai prasidės {{ item.trainingDate|date("Y-m-d H:i")  }}
+                                <form  action="" method="post">
+                                    <input type="hidden" name="userId" value="{{ data.userId }}"/>
+                                    <input type="hidden" name="trainingId" value="{{ item.id }}"/>
+                                    <input type="submit" name="cancel" value="Atšaukti registraciją"/>
+                                </form>
+                            </p>
+                        {% else %}
+                            <p> Mokymai pasibaigė {{ item.trainingDate|date("Y-m-d H:i")  }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="clear"></div>
+
+                {% endfor %}
+                {% elseif data.Training is defined  %}
+                    <p>Vartotojas nėra užsiregistravęs mokymuose!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}

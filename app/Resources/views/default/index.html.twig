@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="user_info">
+        {% if app.session.get('UserId') is defined and app.session.get('UserId') is not null %}
+            <a href="/userinformation" alt=""> {{ app.session.get('UserName')}} {{ app.session.get('UserSurname') }}</a>
+            <a href="/logoff" alt="" class="logoff">Atsijungti</a>
+        {% else %}
+            <form action="" method="post">
+                <input type="email" name="userEmail" placeholder="El. paštas"/>
+                <input type="submit" name="register" value="Prisijungti"/>
+            </form>
+        {% endif %}
+    </div>
+    <div id="wrapper">
+        <div id="container">
+            <div id="welcome">
+                <h1><span>Registracija</span></h1>
+            </div>
+
+            <div id="trainings">
+                {% for item in Training %}
+                <div class="trainings-list">
+                    {% if date(item[0].trainingDate) > date() and item.trainingUsers < item[0].trainingUserCount %}
+                    <a href="/registration/{{ item[0].id }}" alt="{{ item[0].trainingName }}">{{ item[0].trainingName }}</a>
+                    {% else %}
+
+                    <p>{{ item[0].trainingName }}
+                        {% if  item.trainingUsers >= item[0].trainingUserCount %}
+                            <span class="red">Vietų nėra</span>
+                        {% endif %}
+                    </p>
+                    {% endif %}
+                </div>
+                <div class="trainings-user-count">
+                    <p>{{ item.trainingUsers }} / {{ item[0].trainingUserCount }}</p>
+                </div>
+                <div class="trainings-date">
+                    {% if date(item[0].trainingDate) > date()  %}
+                        <p> Mokymai prasidės {{ item[0].trainingDate|date("Y-m-d H:i")  }}</p>
+                    {% else %}
+                        <p> Mokymai pasibaigė {{ item[0].trainingDate|date("Y-m-d H:i")  }}</p>
+                    {% endif %}
+                </div>
+                <div class="clear"></div>
+
+                {% endfor %}
+            </div>
+
+            <div id="next">
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}

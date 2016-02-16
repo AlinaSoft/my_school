@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="user_info">
+        {% if app.session.get('UserId') is defined and app.session.get('UserId') is not null %}
+            <a href="/userinformation" alt="">{{ app.session.get('UserName')}} {{ app.session.get('UserSurname') }}</a>
+            <a href="/logoff" alt="" class="logoff">Atsijungti</a>
+        {% else %}
+            <form action="" method="post">
+                <input type="email" name="userEmail" placeholder="El. paštas"/>
+                <input type="submit" name="register" value="Prisijungti"/>
+            </form>
+        {% endif %}
+    </div>
+    <div id="wrapper">
+        <div id="container">
+            <h1>Mokymas: {{ data.TrainingName }}</h1>
+            <h2>Dalyvių kiekis mokyme {{ data.TrainingUserCount }} iš {{ data.TrainingUserCountMax }}</h2>
+                {% if data.TrainingUserCount >= data.TrainingUserCountMax %}
+                <p>Registracija pasibaigė. Mokymuose užsiregystravo maksimalus dalyvių skaičius.</p>
+                <p>Norėdami užsiregistruoti kituose mokymuose, pereikite prie mokymo sąrašo <a href="/" alt="">Mokymai</a></p>
+                {% else %}
+                    {% if (app.session.get('UserId') is defined and app.session.get('UserId') is not null) or (data.request is defined and data.request) %}
+                        <p>Registracija patvirtinta!</p>
+                        {% else %}
+                            {% if data.message is defined %}<p class="message">{{ data.message }}</p> {% endif %}
+                            <form action="" method="post">
+                                <p><input type="text" name="userName" placeholder="Vardas" /></p>
+                                <p><input type="text" name="userSurname" placeholder="Pavardė"/></p>
+                                <p><input type="email" name="userEmail" placeholder="El. paštas" /></p>
+                                <p><input type="phone" name="userPhone" placeholder="Telefonas" />
+                                <span class="small">Pvz.: 3706xxxxxxx, 86xxxxxxx, 6xxxxxxx</span></p>
+                                <p><input type="submit" name="Patvirtinti"/></p>
+                            </form>
+                    {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
